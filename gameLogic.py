@@ -39,7 +39,7 @@ class Game:
             column=6
         for row in range(ROW_COUNT-1,-1,-1):
             if self.board[row][column] == 0:
-                self.borad[row][column] = self.turn
+                self.board[row][column] = self.turn
                 self.max_turns =- 1
                 return row,column
         return -1,-1
@@ -73,7 +73,7 @@ class Game:
                         self.winner = self.getTurn()
 
         if not self.game_over :
-            if  self.amountOfCheckers == 0 :
+            if  self.max_turns == 0 :
                 self.winner = 'Draw'
                 self.game_over = True
             else :
