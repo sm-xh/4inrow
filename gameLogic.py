@@ -18,9 +18,9 @@ class Game:
     def getTurn(self):
         """funkcja zwracająca informacje o tym, który gracz wykonuje ruch"""
         if self.turn == 1:
-            return "Tura gracza"
+            return "CZERWONY"
         elif self.turn == 2:
-            return "Gracz 2"
+            return "ŻÓLTY"
 
     def changeTurn(self):
         """funkcja pozwalająca na zmianę tury"""
@@ -32,7 +32,7 @@ class Game:
 
     def player_move(self, position):
         """funkcja realizująca ruch gracza"""
-        column = (position[0]-50)//100
+        column = (position[0]-50)//100   #pozycja jest obliczana na postawie obecnego polozenia myszy
         if column<0:
             column=0
         elif column>6:

@@ -5,6 +5,7 @@ import pygame
 from gameLogic import *
 from constans import *
 
+
 class userInterface:
     """Klasa bazowa definujaca interfejs uzytkownika"""
 
@@ -12,31 +13,32 @@ class userInterface:
         """konstruktor inicjalizujący ustawienia gry"""
         self.game = Game()
         self.run = True
-        self.click=False
+        self.click = False
 
         self.clock = pygame.time.Clock()
-        self.gameDisplay = pygame.display.set_mode((1280, 720))
+        self.gameDisplay = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption("Connect Four")
         pygame.init()
         pygame.font.init()
-        #kolory
+        # kolory
         self.red = (255, 0, 0)
         self.yellow = (255, 255, 0)
-        self.blue = (0,30,130)
+        self.green = (0, 100, 30)
         self.white = (255, 255, 255)
         # kofiguracja czcionek
         self.bigFont = pygame.font.SysFont(None, 80)
         self.mediumFont = pygame.font.SysFont(None, 50)
-        self.smallFont = pygame.font.SysFont(None,30)
+        self.smallFont = pygame.font.SysFont(None, 30)
 
     def startScreen(self):
         """funkcja definiująca ekran startowy"""
         skip = False
         self.gameDisplay.fill((88, 111, 200))
 
-        button_start = pygame.Rect(200,150,400,80)
-        button_help = pygame.Rect(200,300,400,80)
-        button_quit = pygame.Rect(200,450,400,80)
+        # przyciski menu
+        button_start = pygame.Rect(200, 150, 400, 80)
+        button_help = pygame.Rect(200, 300, 400, 80)
+        button_quit = pygame.Rect(200, 450, 400, 80)
 
         pygame.draw.rect(self.gameDisplay, (255, 0, 0), button_start)
         pygame.draw.rect(self.gameDisplay, (255, 0, 0), button_help)
@@ -46,29 +48,29 @@ class userInterface:
         rules = self.bigFont.render("Rules", True, (0, 0, 0))
         quit = self.bigFont.render("Quit", True, (0, 0, 0))
 
-        self.gameDisplay.blit(play,(250,160))
+        self.gameDisplay.blit(play, (250, 160))
         self.gameDisplay.blit(rules, (320, 315))
         self.gameDisplay.blit(quit, (330, 460))
 
         while not skip:
             self.clock.tick(30)
-            #lokalizacja kursora myszki
-            mx,my = pygame.mouse.get_pos()
+            # lokalizacja kursora myszki
+            mx, my = pygame.mouse.get_pos()
 
-            if button_start.collidepoint((mx,my)):
-                if self.click==True:
+            if button_start.collidepoint((mx, my)):
+                if self.click == True:
                     self.game.twoPlayer = True
                     self.playgame()
-            if button_help.collidepoint(((mx,my))):
-                if self.click==True:
+            if button_help.collidepoint(((mx, my))):
+                if self.click == True:
                     self.about()
-            if button_quit.collidepoint((mx,my)):
-                if self.click==True:
-                    skip=True
-                    self.run=False
+            if button_quit.collidepoint((mx, my)):
+                if self.click == True:
+                    skip = True
+                    self.run = False
 
-            self.click=False
-            #detekcja wyjścia z gry
+            self.click = False
+            # detekcja wyjścia z gry
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -76,8 +78,8 @@ class userInterface:
                 if event.type == pygame.KEYDOWN:
                     pass
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button==1:
-                        self.click=True
+                    if event.button == 1:
+                        self.click = True
                 pygame.display.update()
 
     def about(self):
@@ -104,63 +106,51 @@ class userInterface:
             aboutscreen.append(self.smallFont.render(instructions_txt[i], True, (0, 0, 0)))
             self.gameDisplay.blit(aboutscreen[i], (80, 20 * i + 250))
 
-        returnMenu = self.mediumFont.render('Powrót do menu', True, (0, 0, 0))
-        self.gameDisplay.blit(returnMenu, (325, 400))
         skip = False
         while not skip:
             self.clock.tick(30)  # This limits the while loop to a max of 10 times per second.
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    skip = False
-                    self.run = False
-                if event.type == pygame.MOUSEBUTTONUP:
-                    pos = pygame.mouse.get_pos()
-                    if ((pos[0] > 320 and pos[0] < 480) and (pos[1] > 395 and pos[1] < 435)):
-                        skip = True
-                        self.startScreen()
-            pygame.display.update()
 
-    def selectEnemy(self):
-
-        skip = False
-        self.gameDisplay.fill((66, 111, 155))
-        onePlayer = self.mediumFont.render('One player', True, (0, 0, 0))
-        twoPlayer = self.mediumFont.render('Two player', True, (0, 0, 0))
-        self.gameDisplay.blit(onePlayer, (300, 250))
-        self.gameDisplay.blit(twoPlayer, (300, 360))
-        while not skip:
-            self.clock.tick(30)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+            mx, my = pygame.mouse.get_pos()
+            if button_return.collidepoint((mx, my)):
+                if self.click == True:
                     skip = True
-                    self.run = False
-
-                if event.type == pygame.MOUSEBUTTONUP:
-                    pos = pygame.mouse.get_pos()
-                    if ((pos[0] > 290 and pos[0] < 460) and (pos[1] > 246 and pos[1] < 285)):
-                        skip = True
-                        self.game.twoPlayer = False
-                        self.playgame()
-                    elif ((pos[0] > 295 and pos[0] < 450) and (pos[1] > 358 and pos[1] < 395)):
-                        skip = True
-                        self.game.twoPlayer = True
-                        self.playgame()
-            pygame.display.update()
+                    self.startScreen()
+            self.click = False
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.click = True
+                pygame.display.update()
 
     def playgame(self):
+        self.gameDisplay.fill(self.green)
 
-        self.gameDisplay.fill(self.blue)
-        for row in range(1, 7):
-            for column in range(1, 8):
-                pygame.draw.circle(self.gameDisplay, self.white, [column * 100, row * 100], 30)
+        """petla rysujaca plansze"""
+        for row in range(1, ROW_COUNT + 1):
+            for column in range(1, COLUMN_COUNT + 1):
+                pygame.draw.circle(self.gameDisplay, self.white, (column * 100, row * 100 + 130), 30)
 
+        """petla rysujaca przyciski"""
+        for row in range(1, COLUMN_COUNT + 1):
+            pygame.draw.rect(self.gameDisplay, (240,30,200), [row*100-25, 100, 50, 50])
+            pygame.draw.rect(self.gameDisplay, (220,20,190), [row*100-20, 105, 40, 40])
+
+        pygame.draw.rect(self.gameDisplay, (70,20,40), [290,20,200,40])
+        help_text = self.mediumFont.render('POMOC', 1, (40, 20, 30))
+        self.gameDisplay.blit(help_text, (320, 24))
+
+        """glowna petla gry"""
         while self.run:
-            self.clock.tick(30)  # This limits the while loop to a max of 30 times per second.
-            player1 = self.mediumFont.render('Player1', 1, self.red if self.game.turn == 1 else (128, 128, 128))
-            player2 = self.mediumFont.render('Player2' if self.game.twoPlayer == True else 'Computer', 1,
-                                             self.yellow if self.game.turn == 2 else (128, 128, 128))
+            self.clock.tick(30)
+            player1 = self.mediumFont.render('Czerwony', 1, self.red if self.game.turn == 1 else (self.green))
+            player2 = self.mediumFont.render('Żółty', 1, self.yellow if self.game.turn == 2 else (self.green))
             self.gameDisplay.blit(player1, (50, 24))
             self.gameDisplay.blit(player2, (650, 24))
+
+
 
             if not self.game.game_over:
                 if self.game.twoPlayer or (self.game.turn == 1):
@@ -173,15 +163,8 @@ class userInterface:
                             row, column = self.game.player_move(pos)
                             if (row == -1 or column == -1): continue
                             pygame.draw.circle(self.gameDisplay, self.red if self.game.turn == 1 else self.yellow,
-                                               [(column + 1) * 100, (row + 1) * 100], 30)
+                                               ((column + 1) * 100, (row + 1) * 100 + 130), 30)
                             self.game.isGameOver()
-                else:  # computer's move
-                    # time.sleep(0.5)
-                    pygame.time.wait(300)
-                    row, column = self.game.player_move(self.game.board)
-                    pygame.draw.circle(self.gameDisplay, self.yellow, [(column + 1) * 100, (row + 1) * 100], 30)
-                    self.game.isGameOver()
-
             else:
                 self.endOfGame()
             pygame.display.update()
