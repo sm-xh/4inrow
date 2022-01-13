@@ -1,4 +1,5 @@
 import sys
+import time
 
 import numpy as np
 import pygame
@@ -35,7 +36,6 @@ class userInterface:
         skip = False
         self.gameDisplay.fill((88, 111, 200))
 
-        # przyciski menu
         button_start = pygame.Rect(200, 150, 400, 80)
         button_help = pygame.Rect(200, 300, 400, 80)
         button_quit = pygame.Rect(200, 450, 400, 80)
@@ -66,8 +66,8 @@ class userInterface:
                     self.about()
             if button_quit.collidepoint((mx, my)):
                 if self.click == True:
-                    skip = True
-                    self.run = False
+                    pygame.quit()
+                    sys.exit()
 
             self.click = False
             # detekcja wyjścia z gry
@@ -158,7 +158,7 @@ class userInterface:
                         if (row == -1 or column == -1): continue
                         pygame.draw.circle(self.gameDisplay, self.red if self.game.turn == 1 else self.yellow,
                                            ((column + 1) * 100, (row + 1) * 100 + 130), 30)
-                        self.game.isGameOver()
+                        self.game.isGameOver()      #sprawdzenie czy gra sie nie zakonczyla op kazdym ruchu
             if reset_button.collidepoint((mx, my)):
                 if self.click:
                     self.playAgain()
@@ -182,44 +182,61 @@ class userInterface:
             pygame.display.update()
 
     def playAgain(self):
-
+        """funkcja resetujaca gre"""
         self.game = Game()
         self.startScreen()
 
     def endOfGame(self):
+        """funkcja implementujaca menu koncowe gry"""
+        self.gameDisplay.fill((0, 0, 0))
 
-        pygame.draw.rect(self.gameDisplay, (200, 0, 0) if self.game.turn == 1 else (255, 255, 0), (0, 0, 800, 52))
-        pygame.draw.rect(self.gameDisplay, (102, 204, 0), (0, 640, 800, 30))
-        pygame.draw.rect(self.gameDisplay, (204, 0, 0), (0, 670, 800, 30))
-        if self.game.winner == 'Draw':
-            congrats = self.mediumFont.render('Draw!', 1, (0, 0, 0))
-        elif self.game.winner == 'Player1':
-            congrats = self.mediumFont.render(self.game.getTurn() + ' wins ! Congrats!', 1, (0, 0, 0))
-
+        #ponizsze instrukcje implementuja menu koncowe
+        if self.game.winner == 'REMIS':
+            congrats = self.mediumFont.render('REMIS!', 1, (0, 0, 0))
         else:
-            congrats = self.mediumFont.render(
-                self.game.getTurn() + ' wins ! Congrats!' if self.game.twoPlayer == True else self.game.getTurn() + ' wins !',
-                1, (0, 0, 0))
-        quit = self.smallFont.render('Quit', 1, (0, 0, 0))
-        playAgain = self.smallFont.render('Play again', 1, (0, 0, 0))
-        self.gameDisplay.blit(congrats, (280, 15))
-        self.gameDisplay.blit(quit, (375, 680))
-        self.gameDisplay.blit(playAgain, (350, 650))
+            congrats = self.mediumFont.render(self.game.getTurn() + ' Wygrywa!!!!', True , (0, 0, 0))
+        pygame.draw.rect(self.gameDisplay, (200, 0, 0) if self.game.turn == 1 else (255, 255, 0), (0, 0, 800, 52))
+        self.gameDisplay.blit(congrats, (200, 15))
+        instruction = self.mediumFont.render("Kliknij Reset lub Wyjdz z gry!", True, (255, 255, 255))
 
+        pygame.draw.rect(self.gameDisplay,(102, 204, 80),(100,200,600,400))
+
+        self.gameDisplay.blit(instruction,(170,300))
+
+        button_play = pygame.Rect(200, 400, 400, 80)
+        button_quit = pygame.Rect(200, 500, 400, 80)
+
+        pygame.draw.rect(self.gameDisplay, (255, 0, 0), button_play)
+        pygame.draw.rect(self.gameDisplay, (255, 0, 0), button_quit)
+
+        play_again = self.mediumFont.render("Zagraj ponownie", True, (0, 0, 0))
+        quit_game = self.mediumFont.render("Wyjscie", True, (0, 0, 0))
+
+        self.gameDisplay.blit(play_again, (280, 420))
+        self.gameDisplay.blit(quit_game, (330, 520))
+
+
+        #pętla oczekująca na wybór gracza po rozgrywce
         skip = False
         while not skip:
-            self.clock.tick(30)
+            self.clock.tick(30)  # This limits the while loop to a max of 10 times per second.
+            mx, my = pygame.mouse.get_pos()
+            if button_play.collidepoint((mx, my)):
+                if self.click == True:
+                    skip = True
+                    self.playAgain()
+            if button_quit.collidepoint((mx, my)):
+                if self.click == True:
+                    pygame.quit()
+                    sys.exit()
+
+            self.click = False
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    skip = True
-                    self.run = False
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    pos = pygame.mouse.get_pos()
-                    if pos[1] > 640:
-                        if pos[1] < 670:
-                            self.playAgain()
-                        else:
-                            skip = True
-                            self.run = False
-
-            pygame.display.update()
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.click = True
+                pygame.display.update()
