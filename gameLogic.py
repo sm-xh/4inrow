@@ -15,6 +15,8 @@ class Game:
         self.winner = None
         self.game_over = False
 
+    def resetBoard(self):
+        self.board = np.zeros((ROW_COUNT, COLUMN_COUNT), int)
     def getTurn(self):
         """funkcja zwracająca informacje o tym, który gracz wykonuje ruch"""
         if self.turn == 1:
@@ -79,13 +81,4 @@ class Game:
             else :
                 self.changeTurn()
 
-class Player:
-    """klasa opisująca gracza"""
 
-    def __init__(self, nickname, number):
-        self._nickname = nickname
-        self._player_number = number
-
-    @property
-    def get_player_number(self):
-        return self._player_number

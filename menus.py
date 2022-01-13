@@ -28,7 +28,7 @@ class userInterface:
         # kofiguracja czcionek
         self.bigFont = pygame.font.SysFont(None, 80)
         self.mediumFont = pygame.font.SysFont(None, 50)
-        self.smallFont = pygame.font.SysFont(None, 30)
+        self.smallFont = pygame.font.SysFont(None, 20)
 
     def startScreen(self):
         """funkcja definiująca ekran startowy"""
@@ -88,15 +88,15 @@ class userInterface:
         przemian upuszczają swoje kafelki na wierzch. Pole gry składa się z 7 pionowych kolumn i 6 poziomych linii. \n \
         Obaj gracze mają po 21 identycznych kolorowych płytek. Kiedy gracz upuszcza element do kolumny, zajmuje \n \
         najniższą dostępną przestrzeń w kolumnie. Każdy gracz jest reprezentowany przez jego kolor \n \
-         (na przykład brązowy dla pierwszego gracza i żółty dla drugiego). \n \
-          Jest odtwarzany naprzemiennie. Celem gry jest posiadanie czterech kawałków koloru z rzędu. \n \
-          Ten wiersz może być pionowy, poziomy lub ukośny. Możesz to zrobić, umieszczając kamienie jeden \n \
-          po drugim w siedmiu możliwych kolumnach. Kamienie spadają na najniższą możliwą wolną przestrzeń \n \
-           albo na ziemię, albo na inny kamień.'.split('\n')
+        (na przykład brązowy dla pierwszego gracza i żółty dla drugiego). \n \
+        Jest odtwarzany naprzemiennie. Celem gry jest posiadanie czterech kawałków koloru z rzędu. \n \
+        Ten wiersz może być pionowy, poziomy lub ukośny. Możesz to zrobić, umieszczając kamienie jeden \n \
+        po drugim w siedmiu możliwych kolumnach. Kamienie spadają na najniższą możliwą wolną przestrzeń \n \
+        albo na ziemię, albo na inny kamień.'.split('\n')
 
         self.gameDisplay.fill((66, 111, 155))
 
-        button_return = pygame.Rect(200, 500, 600, 80)
+        button_return = pygame.Rect(200, 500, 500, 80)
         pygame.draw.rect(self.gameDisplay, (255, 0, 0), button_return)
         return_to = self.bigFont.render("Powrót do menu", True, (0, 0, 0))
         self.gameDisplay.blit(return_to, (250, 520))
@@ -104,7 +104,7 @@ class userInterface:
         aboutscreen = []
         for i in range(len(instructions_txt)):
             aboutscreen.append(self.smallFont.render(instructions_txt[i], True, (0, 0, 0)))
-            self.gameDisplay.blit(aboutscreen[i], (80, 20 * i + 250))
+            self.gameDisplay.blit(aboutscreen[i], (60, 20 * i+1 + 200))
 
         skip = False
         while not skip:
@@ -134,37 +134,49 @@ class userInterface:
                 pygame.draw.circle(self.gameDisplay, self.white, (column * 100, row * 100 + 130), 30)
 
         """petla rysujaca przyciski"""
+        coin_buttons = []
         for row in range(1, COLUMN_COUNT + 1):
-            pygame.draw.rect(self.gameDisplay, (240,30,200), [row*100-25, 100, 50, 50])
-            pygame.draw.rect(self.gameDisplay, (220,20,190), [row*100-20, 105, 40, 40])
+            coin_buttons.append(pygame.Rect([row * 100 - 25, 100, 50, 50]))
+            pygame.draw.rect(self.gameDisplay, (255, 0, 0), coin_buttons[row - 1])
+            pygame.draw.rect(self.gameDisplay, (220, 20, 190), [row * 100 - 20, 105, 40, 40])
 
-        pygame.draw.rect(self.gameDisplay, (70,20,40), [290,20,200,40])
-        help_text = self.mediumFont.render('POMOC', 1, (40, 20, 30))
-        self.gameDisplay.blit(help_text, (320, 24))
+        reset_button = pygame.Rect([320, 20, 160, 40])
+        pygame.draw.rect(self.gameDisplay, (0, 40, 200), reset_button)
+        reset_text = self.mediumFont.render('RESET', True, (0, 0, 0))
+        self.gameDisplay.blit(reset_text, (340, 24))
 
         """glowna petla gry"""
         while self.run:
             self.clock.tick(30)
+            mx, my = pygame.mouse.get_pos()
+
+            for x in coin_buttons:
+                if x.collidepoint(((mx, my))):
+                    if self.click:
+                        pos = pygame.mouse.get_pos()
+                        row, column = self.game.player_move(pos)
+                        if (row == -1 or column == -1): continue
+                        pygame.draw.circle(self.gameDisplay, self.red if self.game.turn == 1 else self.yellow,
+                                           ((column + 1) * 100, (row + 1) * 100 + 130), 30)
+                        self.game.isGameOver()
+            if reset_button.collidepoint((mx, my)):
+                if self.click:
+                    self.playAgain()
+
             player1 = self.mediumFont.render('Czerwony', 1, self.red if self.game.turn == 1 else (self.green))
             player2 = self.mediumFont.render('Żółty', 1, self.yellow if self.game.turn == 2 else (self.green))
             self.gameDisplay.blit(player1, (50, 24))
             self.gameDisplay.blit(player2, (650, 24))
-
-
-
+            self.click = False
             if not self.game.game_over:
-                if self.game.twoPlayer or (self.game.turn == 1):
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            self.run = False
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.run = False
 
-                        if event.type == pygame.MOUSEBUTTONUP:
-                            pos = pygame.mouse.get_pos()
-                            row, column = self.game.player_move(pos)
-                            if (row == -1 or column == -1): continue
-                            pygame.draw.circle(self.gameDisplay, self.red if self.game.turn == 1 else self.yellow,
-                                               ((column + 1) * 100, (row + 1) * 100 + 130), 30)
-                            self.game.isGameOver()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 1:
+                            self.click = True
+
             else:
                 self.endOfGame()
             pygame.display.update()
@@ -172,7 +184,7 @@ class userInterface:
     def playAgain(self):
 
         self.game = Game()
-        self.welcomeScreen()
+        self.startScreen()
 
     def endOfGame(self):
 
