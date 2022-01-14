@@ -1,13 +1,11 @@
-# modul zawierajacy informacje o logice gry
+"""MODUL IMPLEMENTUJE LOGIKE GRY"""
 import numpy as np
-
-ROW_COUNT = 6
-COLUMN_COUNT = 7
-
+from constans import *
 
 class Game:
+    """Klasa definiuje logike wlasciwa gry za pomoca funkcji"""
     def __init__(self):
-        """funkcja inicjalizujaca plansze do gry wraz z ustawieniami"""
+        """Konstruktor planszy do gry wraz z ustawieniami"""
         self.board = np.zeros((ROW_COUNT, COLUMN_COUNT), int)
         self.turn = 1
         self.max_turns = 42
@@ -16,13 +14,15 @@ class Game:
         self.game_over = False
 
     def resetBoard(self):
+        """funkcja do resetowania planszy gry"""
+
         self.board = np.zeros((ROW_COUNT, COLUMN_COUNT), int)
     def getTurn(self):
         """funkcja zwracająca informacje o tym, który gracz wykonuje ruch"""
         if self.turn == 1:
             return "CZERWONY"
         elif self.turn == 2:
-            return "ŻÓLTY"
+            return "ŻÓŁTY"
 
     def changeTurn(self):
         """funkcja pozwalająca na zmianę tury"""

@@ -56,7 +56,7 @@ class userInterface:
             self.clock.tick(30)
             # lokalizacja kursora myszki
             mx, my = pygame.mouse.get_pos()
-
+            print(mx,my)
             if button_start.collidepoint((mx, my)):
                 if self.click == True:
                     self.game.twoPlayer = True
