@@ -6,3 +6,4 @@ if __name__ == "__main__":
     tests.test_init_move()
     tests.test_winning_vertically()
     tests.test_winning_plus4_in_row()
+    tests.test_draw()
