@@ -11,7 +11,7 @@ def test_init_move():
     test_game.changeTurn()
     test_game.player_move((400,0))
 
-    assert list(test_game.board[-1]).count(0) == 3
+    assert list(test_game._board[-1]).count(0) == 3
 
 def test_winning_horizontally():
     test_game = Game()
@@ -24,7 +24,7 @@ def test_winning_horizontally():
     column=(500,0)
     test_game.player_move(column)
     test_game.isGameOver()
-    assert test_game.winner == "CZERWONY"
+    assert test_game._winner == "CZERWONY"
 
 def test_winning_vertically():
     test_game = Game()
@@ -35,7 +35,7 @@ def test_winning_vertically():
     test_game.player_move(column)
     test_game.player_move(column)
     test_game.isGameOver()
-    assert test_game.winner == "ŻÓŁTY"
+    assert test_game._winner == "ŻÓŁTY"
 
 def test_winning_plus4_in_row():
     test_game = Game()
@@ -73,7 +73,7 @@ def test_winning_plus4_in_row():
     test_game.changeTurn()
     test_game.player_move((400, 0))
     test_game.isGameOver()
-    assert test_game.winner == "CZERWONY"
+    assert test_game._winner == "CZERWONY"
 
 def test_winning_cross():
     test_game = Game()
@@ -100,6 +100,4 @@ def test_winning_cross():
 
     test_game.player_move((400, 0))
     test_game.isGameOver()
-    assert test_game.winner == "ŻÓŁTY"
-
-test_winning_cross()
+    assert test_game._winner == "ŻÓŁTY"
