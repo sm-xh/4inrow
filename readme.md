@@ -1,5 +1,3 @@
-#Markdown
-
 Repozytorium z kodem na GitHub'ie: https://github.com/sm-xh/4inrow_js
 
 <h3>Treść projektu:</h3>
