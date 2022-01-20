@@ -1,5 +1,5 @@
 from gameLogic import *
-
+from gameExceptions import ColumnFullException
 
 def test_init_move():
     test_game = Game()
@@ -177,3 +177,23 @@ def test_draw():
 
     test_game.isGameOver()
     assert test_game._winner == "REMIS"
+
+
+def test_full_column():
+    test_game = Game()
+
+    #zapelnieie kolumny
+    test_game.changeTurn()
+    test_game.player_move((100, 0))
+    test_game.changeTurn()
+    test_game.player_move((100, 0))
+    test_game.changeTurn()
+    test_game.player_move((100, 0))
+    test_game.changeTurn()
+    test_game.player_move((100, 0))
+    test_game.changeTurn()
+    test_game.player_move((100, 0))
+    test_game.changeTurn()
+    test_game.player_move((100, 0))
+    test_game.changeTurn()
+    assert test_game.player_move((100,0)) == (-1, -1)  #funkcja zwraca (-1,-1) jako obsługę wyjątku

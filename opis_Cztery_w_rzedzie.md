@@ -62,6 +62,7 @@ Testy zostały zdefiniowane w module <a href="https://github.com/sm-xh/4inrow_js
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests.py#L111">test_draw()</a> - Zapełnienie pola gry tak, że żaden gracz nie ułożył linii - oczekiwana informacja o remisie.</li>
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests.py#L44">test_winning_plus4_in_row()</a> - Ułożenie linii dłuższej niż 4 przez jednego z graczy - oczekiwana informacja o jego wygranej.</li>
 </ol>
+</ol>
 <hr>
 <h2>Uwagi praktyczne</h2>
 <ol>
