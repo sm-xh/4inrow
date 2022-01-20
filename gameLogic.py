@@ -1,6 +1,8 @@
 """MODUL IMPLEMENTUJE LOGIKE GRY"""
 import numpy as np
 from constans import *
+from gameExceptions import ColumnFullException
+
 
 class Game:
     """Klasa definiuje logike wlasciwa gry za pomoca funkcji"""
@@ -39,12 +41,15 @@ class Game:
             column=0
         elif column>6:
             column=6
-        for row in range(ROW_COUNT-1,-1,-1):
-            if self._board[row][column] == 0:
-                self._board[row][column] = self._turn
-                self._max_turns = self._max_turns - 1
-                return row,column
-        return -1,-1
+        try:
+            for row in range(ROW_COUNT-1,-1,-1):
+                if self._board[row][column] == 0:
+                    self._board[row][column] = self._turn
+                    self._max_turns = self._max_turns - 1
+                    return row,column
+            raise ColumnFullException
+        except ColumnFullException:
+            return -1,-1
 
     def isGameOver(self):
         """funkcja weryfikujaca czy rozgrywka nie zostala juz zakonczona"""
@@ -78,5 +83,3 @@ class Game:
                 self._game_over = True
             else :
                 self.changeTurn()
-
-

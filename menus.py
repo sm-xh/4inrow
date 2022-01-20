@@ -2,6 +2,7 @@ import sys
 import pygame
 from gameLogic import *
 from constans import *
+from gameExceptions import WrongBoardSizeException
 
 
 class userInterface:
@@ -27,7 +28,7 @@ class userInterface:
         # kofiguracja czcionek
         self._bigFont = pygame.font.SysFont(None, 80)
         self._mediumFont = pygame.font.SysFont(None, 50)
-        self.smallFont = pygame.font.SysFont(None, 20)
+        self._smallFont = pygame.font.SysFont(None, 20)
 
     def startScreen(self):
         """funkcja definiująca ekran startowy"""
@@ -97,14 +98,14 @@ class userInterface:
 
         aboutscreen = []
         for i in range(len(instructions_txt)):
-            aboutscreen.append(self.smallFont.render(instructions_txt[i], True, (0, 0, 0)))
+            aboutscreen.append(self._smallFont.render(instructions_txt[i], True, (0, 0, 0)))
             self._gameDisplay.blit(aboutscreen[i], (60, 20 * i + 1 + 200))
 
         # przycisk powrot do menu
-        button_return = pygame.Rect(200, 600, 500, 80)
+        button_return = pygame.Rect(200, 560, 500, 80)
         pygame.draw.rect(self._gameDisplay, (255, 0, 0), button_return)
         return_to = self._bigFont.render("Powrót do menu", True, (0, 0, 0))
-        self._gameDisplay.blit(return_to, (250, 620))
+        self._gameDisplay.blit(return_to, (250, 580))
 
         skip = False
 
@@ -115,7 +116,7 @@ class userInterface:
             mx, my = pygame.mouse.get_pos()  # pozycja myszki
             # detekcja klikniecia w przycisk
             if button_return.collidepoint((mx, my)):
-                if self._click == True:
+                if self._click:
                     skip = True
                     self.startScreen()
 
@@ -139,6 +140,10 @@ class userInterface:
             for column in range(1, COLUMN_COUNT + 1):
                 pygame.draw.circle(self._gameDisplay, self._white, (column * 100, row * 100 + 130), 30)
 
+        # obsługa wyjątku związanego z złym rozmiarem okna gry
+        if ROW_COUNT != 6 or COLUMN_COUNT != 7:
+            raise WrongBoardSizeException
+
         # petla rysujaca przyciski
         coin_buttons = []
         for row in range(1, COLUMN_COUNT + 1):
@@ -155,7 +160,7 @@ class userInterface:
         # pętla główna gry
         while self._run:
             self._clock.tick(30)
-            mx, my = pygame.mouse.get_pos() # lokalizacja myszki
+            mx, my = pygame.mouse.get_pos()  # lokalizacja myszki
 
             # detekcja klikniecia w przycisk do wrzucania monet
             for x in coin_buttons:
@@ -199,23 +204,17 @@ class userInterface:
 
     def endOfGame(self):
         """funkcja implementujaca menu koncowe gry"""
-        self._gameDisplay.fill((0, 0, 0))
-
+        pygame.draw.rect(self._gameDisplay, (102, 204, 80), (0, 0, 800, 190))
         # wypisz kolor zwyciezcy gry
         if self._game._winner == 'REMIS':
             congrats = self._mediumFont.render('REMIS!', 1, (0, 0, 0))
         else:
-            congrats = self._mediumFont.render(self._game.getTurn() + ' Wygrywa!!!!', True, (0, 0, 0))
+            congrats = self._mediumFont.render(self._game.getTurn() + ' WYGRYWA!!!!', True, (0, 0, 0))
         pygame.draw.rect(self._gameDisplay, (200, 0, 0) if self._game._turn == 1 else (255, 255, 0), (0, 0, 800, 52))
-        self._gameDisplay.blit(congrats, (200, 15))
+        self._gameDisplay.blit(congrats, (200, 10))
 
-        # ponizsze linie rysuja menu koncowe
-        instruction = self._mediumFont.render("Kliknij Reset lub Wyjdz z gry!", True, (255, 255, 255))
-        pygame.draw.rect(self._gameDisplay, (102, 204, 80), (100, 200, 600, 400))
-        self._gameDisplay.blit(instruction, (170, 300))
-
-        button_play = pygame.Rect(200, 400, 400, 80)
-        button_quit = pygame.Rect(200, 500, 400, 80)
+        button_play = pygame.Rect(50, 85, 300, 60)
+        button_quit = pygame.Rect(430, 85, 300, 60)
 
         pygame.draw.rect(self._gameDisplay, (255, 0, 0), button_play)
         pygame.draw.rect(self._gameDisplay, (255, 0, 0), button_quit)
@@ -223,14 +222,14 @@ class userInterface:
         play_again = self._mediumFont.render("Zagraj ponownie", True, (0, 0, 0))
         quit_game = self._mediumFont.render("Wyjscie", True, (0, 0, 0))
 
-        self._gameDisplay.blit(play_again, (280, 420))
-        self._gameDisplay.blit(quit_game, (330, 520))
+        self._gameDisplay.blit(play_again, (70, 95))
+        self._gameDisplay.blit(quit_game, (510, 95))
 
         # pętla oczekująca na wybór gracza po rozgrywce
         skip = False
         while not skip:
             self._clock.tick(30)
-            mx, my = pygame.mouse.get_pos()     # lokalizacja myszki
+            mx, my = pygame.mouse.get_pos()  # lokalizacja myszki
             # obsluga klikniecia w przycisk
             if button_play.collidepoint((mx, my)):
                 if self._click == True:
