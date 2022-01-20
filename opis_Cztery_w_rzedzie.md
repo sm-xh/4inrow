@@ -51,6 +51,9 @@ Następnie funkcja jest zapętlana do momentu, aż rozgrywka się nie zakończy,
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/menus.py#L200">endOfGame()</a> - funkcja wywoływana zakończeniu rozgrywki (po wrzuceniu żetonu, parametr Game()._game_over jest ustawiony na True). Ekran wyświetla infomację o tym kto wygrał (kolor gracza/informację o remisie) oraz pozwala na podjęcie dwóch akcji, które zostały zdefiniowane w pętli głównej. Tymi zdarzenaimi jest rozpoczęcie gry od nowa lub wyjście.</li>
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/menus.py#L195">playAgain()</a> - funkcja resetująca menu gry - tworzona jest nowa instancja klasy <a href="https://github.com/sm-xh/4inrow_js/blob/master/gameLogic.py#L5">Game()</a>.</li>
 </ol>
+<h3> Moduł <a href="https://github.com/sm-xh/4inrow_js/blob/master/gameExceptions.py">gameExceptions.py</a></h3>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Moduł implementuje dwa wyjątki, które są obsługiwane w programie.
 <hr>
 <h2>Testy jednostkowe</h2>
 Testy zostały zdefiniowane w module <a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests.py">tests.py</a>. Testy są uruchamiane za pomocą pliku <a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests_run.py">tests_run.py</a> - należy wykonać polecenie "python tests_run.py". Omówienie poszczególnych testów:
@@ -61,11 +64,14 @@ Testy zostały zdefiniowane w module <a href="https://github.com/sm-xh/4inrow_js
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests.py#L83">test_winning_cross()</a> - Ułożenie skośnej linii przez dowolnego gracza - oczekiwana informacja o jego wygranej.</li>
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests.py#L111">test_draw()</a> - Zapełnienie pola gry tak, że żaden gracz nie ułożył linii - oczekiwana informacja o remisie.</li>
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests.py#L44">test_winning_plus4_in_row()</a> - Ułożenie linii dłuższej niż 4 przez jednego z graczy - oczekiwana informacja o jego wygranej.</li>
-</ol>
+    <li><a href="https://github.com/sm-xh/4inrow_js/blob/master/tests.py#L182">test_full_column()</a> - Próba wrzucenia monety do zapełnionej kolumny - oczekiwana informacja o błędzie (realizacja poprzez okienko typu popup).</li>
 </ol>
 <hr>
 <h2>Uwagi praktyczne</h2>
 <ol>
     <li>Głównym problemem podczas tworzenia projektu było złe zarządzanie czasem poprzez developera, co uniemożliwiło rozbudowanie projektu w taki sposób, aby spełniał wszystkie założenia. Pracę starano zorganizować się w taki sposób, aby skupić się na najważniejszych aspektach programu.</li>
     <li>Mimo wykorzystania modułu do przechowywania stałych <a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/constans.py">constans.py</a>, w programie występują tzw. <i>magic numbers</i>, których znaczenie nie jest oczywiste. Problem ten starano załagodzić się wykorzstaniem komentarzy.</li>
+    <li>Funkcja sprawdzająca czy gra została zakończona mogłaby zostać zoptymalizowana i sprawdzać tylko komórki, które są w obszarze ostatnio zapełnionej komórki.</li>
 </ol>
+<hr>
+<h2>Podsumowanie projektu względem założeń</h2>
