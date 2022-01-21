@@ -26,7 +26,7 @@
 </p>
 Metody zawarte w klasie <a href="https://github.com/sm-xh/4inrow_js/blob/master/gameLogic.py#L5">Game()</a>:
 <ol>
-    <li><a href="https://github.com/sm-xh/4inrow_js/blob/master/gameLogic.py#L16">resetBoard()</a> - odpowiada za resetowanie planszy do gry. Powoduje stworzenie nowej istancji klasy <a href="https://github.com/sm-xh/4inrow_js/blob/master/gameLogic.py#L5">Game()</a>.</li>
+    <li><a href="https://github.com/sm-xh/4inrow_js/blob/master/gameLogic.py#L18">resetBoard()</a> - odpowiada za resetowanie planszy do gry. Powoduje stworzenie nowej istancji klasy <a href="https://github.com/sm-xh/4inrow_js/blob/master/gameLogic.py#L5">Game()</a>.</li>
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/gameLogic.py#L20">getTurn()</a> - funkcja zwracająca w formie stringu informację o tym, kto aktualnie wykonuje turę.</li>
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/gameLogic.py#L27">changeTurn()</a> - funkcja zmieniająca wartość zmiennej Game._turn, które przechowuje informację o aktualnej turze</li>
     <li><a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/gameLogic.py#L35">player_move(position)</a> - funkcja realizująca ruch gracza. Przyjmuje zmienną wejściową "position", która zawiera pozycję myszki w momencie kliknięcia w przycisk. Następnie wypełnia Game._board(), zgodnie z zasadami gry.</li>
@@ -53,7 +53,11 @@ Następnie funkcja jest zapętlana do momentu, aż rozgrywka się nie zakończy,
 </ol>
 <h3> Moduł <a href="https://github.com/sm-xh/4inrow_js/blob/master/gameExceptions.py">gameExceptions.py</a></h3>
 <p>
-&nbsp;&nbsp;&nbsp;&nbsp;Moduł implementuje dwa wyjątki, które są obsługiwane w programie.
+&nbsp;&nbsp;&nbsp;&nbsp;Moduł implementuje dwa wyjątki obsługiwane w programie.
+<ol>
+    <li><a href="https://github.com/sm-xh/4inrow_js/blob/51713cdaa4f4861445e9c77589a4fef001d68f49/gameExceptions.py#L6">WrongBoardSizeException(Exception)</a> - własna klasa wyjątku zgłaszana w momentu, gdy gracz próbuje wystartować grę ze zmiennymi <a href="https://github.com/sm-xh/4inrow_js/blob/51713cdaa4f4861445e9c77589a4fef001d68f49/constans.py#L3">ROW_COUNT</a>, <a href="https://github.com/sm-xh/4inrow_js/blob/51713cdaa4f4861445e9c77589a4fef001d68f49/constans.py#L4">COLUMN_COUNT</a> innymi niż zgodnymi z założeniami zadania (6x7). Wystąpienie wyjątku powoduje wywołanie okienka popup z komunikatem i wyjście z gry.</li>
+    <li><a href="https://github.com/sm-xh/4inrow_js/blob/51713cdaa4f4861445e9c77589a4fef001d68f49/gameExceptions.py#L13">ColumnFullException(Exception)</a> - wyjątek, który jest zgłaszany jest obsługiwany, powoduje wywołanie okienka z instrukcją, ale gra nie jest zatrzymywana.</li>
+</ol>
 <hr>
 <h2>Testy jednostkowe</h2>
 Testy zostały zdefiniowane w module <a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests.py">tests.py</a>. Testy są uruchamiane za pomocą pliku <a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/tests_run.py">tests_run.py</a> - należy wykonać polecenie "python tests_run.py". Omówienie poszczególnych testów:
@@ -73,5 +77,3 @@ Testy zostały zdefiniowane w module <a href="https://github.com/sm-xh/4inrow_js
     <li>Mimo wykorzystania modułu do przechowywania stałych <a href="https://github.com/sm-xh/4inrow_js/blob/6dc8547345641031df0b03fe8999f1d2319ecb9d/constans.py">constans.py</a>, w programie występują tzw. <i>magic numbers</i>, których znaczenie nie jest oczywiste. Problem ten starano załagodzić się wykorzstaniem komentarzy.</li>
     <li>Funkcja sprawdzająca czy gra została zakończona mogłaby zostać zoptymalizowana i sprawdzać tylko komórki, które są w obszarze ostatnio zapełnionej komórki.</li>
 </ol>
-<hr>
-<h2>Podsumowanie projektu względem założeń</h2>
